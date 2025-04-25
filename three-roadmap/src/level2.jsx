@@ -9,8 +9,8 @@ const Level2 = () => {
     useEffect(() => {
         if (!canvasRef.current) return;
         const scene = new THREE.Scene();
-        const cbgeometry = new THREE.BoxGeometry(1, 1, 1);
-        const cbmaterial = new THREE.MeshBasicMaterial({ color: "red" });
+        const cbgeometry = new THREE.SphereGeometry(12, 32, 32);
+        const cbmaterial = new THREE.MeshBasicMaterial({ color: "blue", wireframe: true });
 
         const cbmesh = new THREE.Mesh(cbgeometry, cbmaterial);
 
@@ -21,7 +21,7 @@ const Level2 = () => {
         0.1,
         1000
         );
-        camera.position.z = 5;
+        camera.position.z = 30;
         const renderer = new THREE.WebGLRenderer({
         canvas: canvasRef.current,
         antialias: true,
@@ -39,9 +39,9 @@ const Level2 = () => {
         });
 
         const loop = () => {
-        controls.update();
-        renderer.render(scene, camera);
-        requestAnimationFrame(loop);
+            controls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(loop);
         };
 
         loop();
@@ -57,7 +57,7 @@ const Level2 = () => {
   };
     return (
         <>
-            <button className="button" onClick={triggerAnimation}> 
+            <button className="button" onClick={triggerAnimation}> Show
             </button>
             <div className={`render ${animate ? "show" : ""}`}>
             <canvas ref={canvasRef} className="three-canvas"></canvas>

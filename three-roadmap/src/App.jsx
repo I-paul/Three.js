@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Level2 from "./level2";
+import Earth from "./earthModel";
 
 const App = () => {
   const canvasRef = useRef(null);
@@ -13,25 +14,31 @@ const App = () => {
 
     const scene = new THREE.Scene();
     const cbgeometry = new THREE.BoxGeometry(1, 1, 1);
-    const cbmaterial = new THREE.MeshBasicMaterial({ color: "red" });
-    const cbgeometry1 = new THREE.BoxGeometry(1, 2, 1);
-    const cbmaterial1 = new THREE.MeshBasicMaterial({ color: "brown" });
+    const cbmaterial = new THREE.MeshLambertMaterial({ color: "red" });
 
     const cbmesh = new THREE.Mesh(cbgeometry, cbmaterial);
-    const cbmesh2 = new THREE.Mesh(cbgeometry1, cbmaterial1);
-    cbmesh2.position.x = 1;
-    cbmesh2.position.y = -0.5;  
+    cbmesh.position.x = 3;
+    // const cbmesh2 = new THREE.Mesh(cbgeometry1, cbmaterial1);
+    // cbmesh2.position.x = 1;
+    // cbmesh2.position.y = -0.5;  
     const cbmesh3 = new THREE.Mesh(cbgeometry, cbmaterial);
-    cbmesh3.position.x = -1;
+    cbmesh3.position.x = -3;
 
     const grp = new THREE.Group();
     grp.add(cbmesh);
-    grp.add(cbmesh2);
+    // grp.add(cbmesh2);
     grp.add(cbmesh3);
-    grp.position.y = 2;
     scene.add(grp);
-    // const axesHelper = new THREE.AxesHelper(5);
-    // scene.add(axesHelper);
+
+    const Alight = new THREE.AmbientLight(0xffffff, 0.5);
+    Alight.position.set(0, 0, 0).normalize();
+    scene.add(Alight);
+    const Plight = new THREE.PointLight(0xffffff, 3, 5);
+    Plight.castShadow = true;
+    Plight.position.set(0, 0, 0).normalize();
+    scene.add(Plight);
+    const axesHelper = new THREE.AxesHelper(5);
+    scene.add(axesHelper);
 
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -77,14 +84,14 @@ const App = () => {
   return (
     <Router>
       <nav>
-        <Link to="/">Home</Link> | <Link to="/level2">About</Link>
+        <Link className="link" to="/">Home</Link> | <Link className="link" to="/level2">Sphere</Link> | <Link className="link" to="/level3">Earth</Link>
       </nav>
       <Routes>
         <Route
           path="/"
           element={
             <>
-              <button className="button" onClick={triggerAnimation}> 
+              <button className="button" onClick={triggerAnimation}>Show 
               </button>
               <div className={`render ${animate ? "show" : ""}`}>
                 <canvas ref={canvasRef} className="three-canvas"></canvas>
@@ -93,6 +100,7 @@ const App = () => {
           }
         />
         <Route path="/level2" element={<Level2 />} />
+        <Route path="/level3" element={<Earth />} />
       </Routes>
     </Router>
   );

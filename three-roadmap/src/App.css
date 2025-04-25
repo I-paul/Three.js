@@ -4,6 +4,36 @@ body{
   background-color: black;
 }
 
+nav{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 10vh;
+  color: white;
+}
+
+.link{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 15px;
+  font-size: 1.3rem;
+  color: slateblue;
+  text-decoration: none;
+}
+.link:hover{
+  color: white;
+  background-color: slateblue;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+.link:active{
+  color: slateblue;
+  background-color: white;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
 .render{
   display: none;
   margin: 0%;
@@ -21,13 +51,24 @@ body{
   height: 100vh;
   overflow: hidden;
 }
+
+canvas{
+  display: block;
+  margin: 0%;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .button{
   position: absolute;
   display: block;
   margin: 20px;
   padding: 4px;
-  width: 200px;
-  height: 100px;
+  width: 100px;
+  height: 50px;
+  border-radius: 12%;
 }
 
 .level2{
