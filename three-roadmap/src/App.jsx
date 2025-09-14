@@ -16,18 +16,24 @@ const App = () => {
 		const scene = new THREE.Scene();
 		const cbgeometry = new THREE.BoxGeometry(1, 1, 1);
 		const cbmaterial = new THREE.MeshLambertMaterial({ color: "red" });
+		const material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		const points = [];
+		points.push(new THREE.Vector3(- 3, 0, 0));
+		points.push(new THREE.Vector3(0, 0, 0));
+		points.push(new THREE.Vector3(3, 0, 0));
+
+		const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
 		const cbmesh = new THREE.Mesh(cbgeometry, cbmaterial);
 		cbmesh.position.x = 3;
-		// const cbmesh2 = new THREE.Mesh(cbgeometry1, cbmaterial1);
-		// cbmesh2.position.x = 1;
-		// cbmesh2.position.y = -0.5;  
+		const linemesh = new THREE.Line(geometry, material);
+
 		const cbmesh3 = new THREE.Mesh(cbgeometry, cbmaterial);
 		cbmesh3.position.x = -3;
 
 		const grp = new THREE.Group();
 		grp.add(cbmesh);
-		// grp.add(cbmesh2);
+		grp.add(linemesh);
 		grp.add(cbmesh3);
 		scene.add(grp);
 
@@ -38,8 +44,8 @@ const App = () => {
 		Plight.castShadow = true;
 		Plight.position.set(8, 3, 0).normalize();
 		scene.add(Plight);
-		const axesHelper = new THREE.AxesHelper(5);
-		scene.add(axesHelper);
+		// const axesHelper = new THREE.AxesHelper(5);
+		// scene.add(axesHelper);
 
 		const camera = new THREE.PerspectiveCamera(
 			75,
@@ -66,6 +72,8 @@ const App = () => {
 
 		const loop = () => {
 			controls.update();
+			grp.rotation.y += 0.001;
+			grp.rotation.x += 0.01;
 			renderer.render(scene, camera);
 			requestAnimationFrame(loop);
 		};

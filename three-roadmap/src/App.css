@@ -35,7 +35,7 @@ nav{
   transition: all 0.3s ease-in-out;
 }
 .render{
-  display: none;
+  display: flex;
   margin: 0%;
   padding: 0;
   width: 100%;
@@ -43,14 +43,6 @@ nav{
   overflow: hidden;
 }
 
-.show{
-  display: block;
-  margin: 0%;
-  padding: 0;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
 
 canvas{
   display: block;

@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import AlbedoTex from "./assets/earth/Albedo.jpg";
+import NightLightsTex from "./assets/earth/night_lights_modified.png";
+import CloudsTex from "./assets/earth/Clouds.png";
+import BumpTex from "./assets/earth/Bump.jpg";          
+import OceanTex from "./assets/earth/Ocean.png";       
 
 const Earth = () => {
     const canvasRef = useRef(null);
@@ -9,52 +14,80 @@ const Earth = () => {
     useEffect(() => {
         if (!canvasRef.current) return;
         const scene = new THREE.Scene();
+        const earthGroup = new THREE.Group();
+        earthGroup.rotation.x = Math.PI / 6;
+        scene.add(earthGroup);
+
         const loader = new THREE.TextureLoader();
-        const texture = loader.load("/earth/Albedo.jpg");
-        const geometry = new THREE.SphereGeometry(3, 32, 32);
-        const material = new THREE.MeshLambertMaterial();
-        material.metalness = 0.5;
-        material.roughness = 0.5;
-        material.map = texture;
-        material.map.wrapS = THREE.RepeatWrapping;
-        material.map.wrapT = THREE.RepeatWrapping;
-        material.map.repeat.set(1, 1);
-        const earth = new THREE.Mesh(geometry, material);
+        const Earthtexture = loader.load(AlbedoTex);
+        const LightsTexture = loader.load(NightLightsTex);
+        const CloudsTexture = loader.load(CloudsTex);
+        const BumpTexture = loader.load(BumpTex);    
+        const oceanTexture = loader.load(OceanTex);     
 
-        const Alight = new THREE.AmbientLight(0xffffff, 0.2);
-        Alight.position.set(0, 0, 0).normalize();
-        scene.add(Alight);
-        const Plight = new THREE.PointLight(0xffffff, 1.4, 1);
-        Plight.position.set(5, 5, 5).normalize();
-        scene.add(Plight);
 
-        scene.add(earth);
+        const geometry = new THREE.IcosahedronGeometry(3, 12);
+        const BaseMaterial = new THREE.MeshLambertMaterial();
+        BaseMaterial.metalness = 12;
+        BaseMaterial.roughness = 0.5;
+        BaseMaterial.map = Earthtexture;
+        BaseMaterial.map.wrapS = THREE.RepeatWrapping;
+        BaseMaterial.map.wrapT = THREE.RepeatWrapping;
+        BaseMaterial.map.repeat.set(1, 1);
+        const earth = new THREE.Mesh(geometry, BaseMaterial);
+        earthGroup.add(earth);
+
+        const LightMaterial = new THREE.MeshBasicMaterial();
+        LightMaterial.map = LightsTexture;
+        LightMaterial.blending = THREE.AdditiveBlending;
+
+        const Lights= new THREE.Mesh(geometry, LightMaterial);
+        earthGroup.add(Lights);
+
+        const CloudMaterial = new THREE.MeshLambertMaterial();
+        CloudMaterial.map = CloudsTexture;
+        CloudMaterial.transparent = true;
+        CloudMaterial.blending = THREE.AdditiveBlending;
+
+        const Clouds = new THREE.Mesh(geometry, CloudMaterial);
+        Clouds.scale.setScalar(1.01);
+        earthGroup.add(Clouds);
+
+        const sunlight = new THREE.DirectionalLight(0xffffff, 1);
+        sunlight.position.set(5, 3, 5);
+        scene.add(sunlight);
+
 
 
         const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
         );
         camera.position.z = 10;
+
         const renderer = new THREE.WebGLRenderer({
-        canvas: canvasRef.current,
-        antialias: true,
+            canvas: canvasRef.current,
+            antialias: true,
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
         window.addEventListener("resize", () => {
-        const aspect = window.innerWidth / window.innerHeight;
-        camera.aspect = aspect;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.aspect = aspect;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
         const loop = () => {
             controls.update();
+            earthGroup.rotation.y += 0.001;
+            Clouds.rotation.y += 0.0015; 
             renderer.render(scene, camera);
             requestAnimationFrame(loop);
         };
@@ -62,20 +95,15 @@ const Earth = () => {
         loop();
 
         return () => {
-        window.removeEventListener("resize", () => {});
-        renderer.dispose();
+            window.removeEventListener("resize", () => { });
+            renderer.dispose();
         };
-  }, [animate]);
-
-  const triggerAnimation = () => {
-    setanimate(!animate);
-  };
+    });
     return (
         <>
-            <button className="button" onClick={triggerAnimation}> Show
-            </button>
-            <div className={`render ${animate ? "show" : ""}`}>
-            <canvas ref={canvasRef} className="three-canvas"></canvas>
+
+            <div className={`render`}>
+                <canvas ref={canvasRef} className="three-canvas"></canvas>
             </div>
         </>
     );

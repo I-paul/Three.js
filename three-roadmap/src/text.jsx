@@ -42,7 +42,7 @@ const Text3D = ({ text = "Hello 3D!", color = "Blue" }) => {
             (font) => {
                 const geometry = new TextGeometry(text, {
                     font: font,
-                    size: 25,
+                    size: 27,
                     depth: 2,
                     curveSegments: 12,
                     bevelEnabled: true,
