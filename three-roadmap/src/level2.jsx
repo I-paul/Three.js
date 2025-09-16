@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import {  useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const Level2 = () => {
     const canvasRef = useRef(null);
-    const [animate, setanimate] = useState(false);
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -50,16 +49,11 @@ const Level2 = () => {
         window.removeEventListener("resize", () => {});
         renderer.dispose();
         };
-  }, [animate]);
+  });
 
-  const triggerAnimation = () => {
-    setanimate(!animate);
-  };
     return (
         <>
-            <button className="button" onClick={triggerAnimation}> Show
-            </button>
-            <div className={`render ${animate ? "show" : ""}`}>
+            <div className={`render`}>
             <canvas ref={canvasRef} className="three-canvas"></canvas>
             </div>
         </>

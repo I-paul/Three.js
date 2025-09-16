@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import AlbedoTex from "./assets/earth/Albedo.jpg";
 import NightLightsTex from "./assets/earth/night_lights_modified.png";
 import CloudsTex from "./assets/earth/Clouds.png";
-import BumpTex from "./assets/earth/Bump.jpg";          
-import OceanTex from "./assets/earth/Ocean.png";       
+// import BumpTex from "./assets/earth/Bump.jpg";          
+// import OceanTex from "./assets/earth/Ocean.png";       
 
 const Earth = () => {
     const canvasRef = useRef(null);
-    const [animate, setanimate] = useState(false);
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -22,8 +21,8 @@ const Earth = () => {
         const Earthtexture = loader.load(AlbedoTex);
         const LightsTexture = loader.load(NightLightsTex);
         const CloudsTexture = loader.load(CloudsTex);
-        const BumpTexture = loader.load(BumpTex);    
-        const oceanTexture = loader.load(OceanTex);     
+        // const BumpTexture = loader.load(BumpTex);    
+        // const oceanTexture = loader.load(OceanTex);     
 
 
         const geometry = new THREE.IcosahedronGeometry(3, 12);
